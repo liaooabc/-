@@ -1,0 +1,77 @@
+发布到 GitHub（给不会写代码的人看的版本）
+=========================================
+
+一共就三件事：建仓库 → 拿令牌 → 以后每次双击「发布到GitHub.command」。
+
+
+一、先在网页上建仓库（只做一次）
+--------------------------------
+1. 浏览器打开 https://github.com/new
+2. Repository name 填：UpdateRadar
+3. 下面三个勾（Add a README / .gitignore / license）都不用勾
+4. 点绿色的 Create repository
+
+建完那个页面就是你的仓库地址，形如：
+    https://github.com/你的用户名/UpdateRadar
+
+
+二、拿一个「令牌」（只做一次，相当于给脚本的钥匙）
+--------------------------------------------------
+1. 右上角头像 → Settings
+2. 左边拉到最下面 → Developer settings
+3. Personal access tokens → Fine-grained tokens → Generate new token
+4. Token name 随便写（例如 更新雷达发布）
+5. Expiration 选 1 year（到期再换一个）
+6. Repository access：选 All repositories，或者 Only select repositories 里勾上 UpdateRadar
+7. Permissions → Repository permissions：
+      Contents       → Read and write   （推源码、传安装包都靠它）
+      Releases       → Read and write
+   其余不用动
+8. 点 Generate token，页面上那一串（ghp_ 或 github_pat_ 开头）**只显示这一次**，复制下来
+
+
+三、把信息填进去（只做一次）
+----------------------------
+在「文稿/更新雷达」里双击「发布到GitHub.command」，
+它会自动打开一个配置文件，长这样：
+
+    OWNER=你的GitHub用户名
+    REPO=UpdateRadar
+    TOKEN=粘贴令牌在这里
+
+把 OWNER 换成你的用户名、TOKEN 换成刚才复制的那串，保存、关掉文本窗口，再双击一次就行。
+配置文件存在 ~/.config/更新雷达/github.cfg，只有你自己能读（权限 600）。
+
+
+四、以后每次发版
+----------------
+1. 双击「发版.command」   → 升版本号、编译、出 DMG（在 dist 里）
+2. 双击「发布到GitHub.command」 → 源码推上去 + DMG 传到 Releases
+
+完事会打印两个地址：
+   发布页  https://github.com/你的用户名/UpdateRadar/releases/tag/v1.0.2
+   下载直链（会同时复制到剪贴板，写文章直接粘）
+
+
+常见问题
+--------
+· 提示 401 / Bad credentials
+  令牌贴错了，或者复制时多了空格。重新生成一个再填。
+
+· 提示 403 / Resource not accessible
+  令牌权限不够：Contents 和 Releases 都要 Read and write。
+
+· 提示 already_exists
+  这个版本号已经发过了。先双击「发版.command」把版本号 +1，再发布。
+
+· 提示 Not Found
+  仓库名或用户名填错了，或者仓库还没建。
+
+· 别人下下来打不开，说「无法验证开发者」
+  这个 App 只有临时签名。让对方在「应用程序」里按住 Control 点图标 →
+  选「打开」→ 再点「打开」，只需一次。安装说明.txt 里也写了。
+
+· 完全不想弄令牌，就想今天先把包发出去
+  那就用纯网页：仓库页右边 Releases → Draft a new release →
+  Choose a tag 填 v1.0.2 → 标题随便写 → 把 dist 里的 dmg 拖进 Attachments →
+  Publish release。缺点是一次只能手动传一个文件，每次都要点一遍。
