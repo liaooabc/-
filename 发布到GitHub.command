@@ -59,13 +59,14 @@ git branch -M main >/dev/null 2>&1 || true
 git add -A >/dev/null 2>&1
 git -c user.name="${OWNER}" -c user.email="${OWNER}@users.noreply.github.com" \
     commit -qm "更新雷达 $VER" >/dev/null 2>&1 || true
-if ! git push -u origin main >/tmp/radar-push.log 2>&1; then
-    say "  推送失败。最常见的原因是：仓库还没在网页上建，或者令牌没给 Contents 写权限。"
-    say "  网页建仓库：https://github.com/new  （名字填 $REPO，什么都别勾）"
-    sed -n '1,4p' /tmp/radar-push.log | sed 's/^/    /'
-    echo; read -n 1 -s -r -p "按任意键关闭"; exit 1
+if git push -u origin main >/tmp/radar-push.log 2>&1; then
+    say "  源码已推送：https://github.com/$OWNER/$REPO"
+else
+    # 源码可以用 GitHub Desktop 那个 Push 顶上，这里不拦着，接着发安装包
+    say "  ⚠ 源码没推上去（不影响发安装包）。"
+    say "    想推源码就用 GitHub Desktop 点一下 Publish/Push，或者检查令牌有没有 Contents 写权限。"
+    sed -n '1,3p' /tmp/radar-push.log | sed 's/^/    /'
 fi
-say "  源码已推送：https://github.com/$OWNER/$REPO"
 
 # ── 2. 建 Release ────────────────────────────────────────
 say "▸ 2/3 创建 Release $TAG"

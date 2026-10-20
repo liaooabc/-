@@ -75,3 +75,23 @@
   那就用纯网页：仓库页右边 Releases → Draft a new release →
   Choose a tag 填 v1.0.2 → 标题随便写 → 把 dist 里的 dmg 拖进 Attachments →
   Publish release。缺点是一次只能手动传一个文件，每次都要点一遍。
+
+
+———————————————————————————————
+更省事的路子：用 GitHub Desktop（已装）
+———————————————————————————————
+不用令牌也能把源码发上去：
+
+1. 打开 GitHub Desktop → 左上下拉菜单里 Sign in → 浏览器里点授权
+2. File → Add local repository… → 选「文稿/更新雷达」
+   （它已经是 git 仓库了，会被认出来）
+3. 右上角出现 Publish repository → 名字填 UpdateRadar
+   → 把「Keep this code private」的勾取消（想私有就留着）→ Publish repository
+4. 完事源码就在 https://github.com/你的用户名/UpdateRadar
+
+源码这步以后用 Desktop 点两下就行。但 **GitHub Desktop 不会发 Release（安装包）**，
+安装包还是二选一：
+  · 纯网页：仓库页 → Releases → Draft a new release → tag 填 v1.0.2 →
+    把 dist 里的 dmg 拖进 Attachments → Publish release
+  · 跑「发布到GitHub.command」（要令牌，但它会把 dmg + 校验文件一起传、
+    并把直链复制到剪贴板，适合经常发版）
